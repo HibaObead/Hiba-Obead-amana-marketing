@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client";
 
 import { useEffect, useState } from "react";
@@ -23,7 +22,6 @@ export default function DemographicView() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // ✅ استخدمي رابطك الأصلي بدون cors-anywhere
         const apiUrl =
           "https://www.amanabootcamp.org/api/fs-classwork-data/amana-transportation";
 
@@ -33,17 +31,8 @@ export default function DemographicView() {
           },
         });
 
-        // ✅ في حال السيرفر رفض (403 أو غيره)
         if (!response.ok) {
-          console.warn(`⚠️ Server refused request: ${response.status}`);
-          // نجرب نحط بيانات تجريبية بدل ما ينهار الموقع
-          setData([
-            { name: "Test User 1", status: "active", value: 20 },
-            { name: "Test User 2", status: "inactive", value: 10 },
-            { name: "Test User 3", status: "active", value: 15 },
-          ]);
-          setError("Server refused access (403). Using demo data instead.");
-          return;
+          throw new Error(`Server refused request: ${response.status}`);
         }
 
         const result = await response.json();
@@ -57,10 +46,9 @@ export default function DemographicView() {
           : [];
 
         setData(cleanData);
-      } catch (err: any) {
-        console.error("Error fetching data:", err);
-        setError("⚠️ Failed to fetch data. Please check your connection.");
-        // لو فشل الطلب، نعرض بيانات مؤقتة بدل شاشة فاضية
+      } catch (err) {
+        console.warn("Fetch failed, using demo data", err);
+        setError("⚠️ Server refused access or failed. Using demo data instead.");
         setData([
           { name: "Demo User A", status: "active", value: 30 },
           { name: "Demo User B", status: "inactive", value: 12 },
@@ -93,7 +81,7 @@ export default function DemographicView() {
       <Navbar />
 
       <div className="flex-1 flex flex-col">
-        <section className="bg-gradient-to-r from-gray-800 to-gray-700 text-white py-12">
+        <section className="bg-linear-to-r from-gray-800 to-gray-700 text-white py-12">
           <div className="px-6 lg:px-8 text-center">
             <h1 className="text-3xl md:text-5xl font-bold">Demographic View</h1>
             <p className="text-gray-400 mt-2">
@@ -155,36 +143,6 @@ export default function DemographicView() {
           </div>
         </div>
 
-=======
-import { Navbar } from '../../src/components/ui/navbar';
-import { CardMetric } from '../../src/components/ui/card-metric';
-import { Footer } from '../../src/components/ui/footer';
-import { Users, UserCheck, TrendingUp, Target } from 'lucide-react';
-
-export default function DemographicView() {
-  return (
-    <div className="flex h-screen bg-gray-900">
-      <Navbar />
-      
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col transition-all duration-300 ease-in-out">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-gray-800 to-gray-700 text-white py-12">
-          <div className="px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-3xl md:text-5xl font-bold">
-                Demographic View
-              </h1>
-            </div>
-          </div>
-        </section>
-
-        {/* Content Area */}
-        <div className="flex-1 p-4 lg:p-6 overflow-y-auto">
-          {/* Page content will go here */}
-        </div>
-        
->>>>>>> 93b0803a5b78693c8e5a5cf1de49d5b42857f6e6
         <Footer />
       </div>
     </div>
